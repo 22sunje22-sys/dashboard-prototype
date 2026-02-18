@@ -6,545 +6,391 @@
 <title>Platinumlist — Dream Report</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --surface2: #1a1a1a;
-    --border: #222222;
-    --border-light: #2a2a2a;
-    --text: #ffffff;
-    --text-dim: #888888;
-    --text-muted: #555555;
-    --accent: #ffffff;
-    --positive: #ffffff;
-    --negative: #666666;
-    --glow: rgba(255,255,255,0.03);
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#0A181C;
+    --surface:#0f2028;
+    --surface2:#132a34;
+    --border:#1a3540;
+    --border-light:#1f4050;
+    --text:#ffffff;
+    --text-dim:#7a9baa;
+    --text-muted:#4a6a7a;
+    --cyan:#79E2FF;
+    --cyan-dim:rgba(121,226,255,0.15);
+    --cyan-glow:rgba(121,226,255,0.06);
+    --lime:#C7F68A;
+    --lime-dim:rgba(199,246,138,0.15);
+    --lime-glow:rgba(199,246,138,0.06);
+    --suede:#00A5D3;
+    --electro:#221327;
   }
-
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 
   /* ── HEADER ── */
-  .header {
-    padding: 48px 64px 40px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-  .header-left h1 {
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-  .header-left h2 {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-  }
-  .header-right {
-    text-align: right;
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.8;
-  }
-  .header-right span { color: var(--text); font-weight: 600; }
+  .header{padding:32px 48px 0;display:flex;justify-content:space-between;align-items:flex-start;}
+  .header-left h1{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-bottom:6px;}
+  .header-left h2{font-size:26px;font-weight:800;letter-spacing:-0.5px;}
+  .header-right{text-align:right;font-size:11px;color:var(--text-dim);line-height:1.8;}
+  .header-right span{color:var(--cyan);font-weight:600;}
 
-  /* ── MAIN GRID ── */
-  .main { padding: 40px 64px 80px; }
+  /* ── TABS ── */
+  .tab-bar{display:flex;gap:0;padding:0 48px;margin-top:24px;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tab-bar::-webkit-scrollbar{display:none;}
+  .tab{
+    padding:12px 20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;
+    color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;
+    white-space:nowrap;transition:all 0.2s;user-select:none;
+  }
+  .tab:hover{color:var(--text-dim);}
+  .tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+
+  /* ── TAB CONTENT ── */
+  .tab-content{display:none;padding:32px 48px 64px;animation:fadeIn 0.3s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
   /* ── KPI ROW ── */
-  .kpi-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    margin-bottom: 40px;
-  }
-  .kpi {
-    background: var(--surface);
-    padding: 32px 28px;
-    position: relative;
-  }
-  .kpi-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 12px;
-    font-weight: 500;
-  }
-  .kpi-value {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    margin-bottom: 8px;
-  }
-  .kpi-change {
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-  .kpi-change.up { background: rgba(255,255,255,0.08); color: #fff; }
-  .kpi-change.down { background: rgba(255,255,255,0.04); color: var(--text-muted); }
-  .kpi-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 10px;
-  }
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:32px;}
+  .kpi{background:var(--surface);padding:24px 22px;}
+  .kpi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;font-weight:500;}
+  .kpi-value{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+  .kpi-change{font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:16px;}
+  .kpi-change.up{background:var(--cyan-dim);color:var(--cyan);}
+  .kpi-change.down{background:rgba(255,255,255,0.04);color:var(--text-muted);}
+  .kpi-change.lime{background:var(--lime-dim);color:var(--lime);}
+  .kpi-sub{font-size:10px;color:var(--text-muted);margin-top:8px;}
 
   /* ── SECTION TITLES ── */
-  .section-title {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    font-weight: 600;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
+  .section-title{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:16px;margin-top:8px;}
 
-  /* ── TWO COL LAYOUT ── */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  /* ── LAYOUTS ── */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:28px;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;margin-bottom:28px;}
+  .full{margin-bottom:28px;}
 
   /* ── CARDS ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  }
-  .card-title {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;overflow:hidden;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan-glow),transparent);}
+  .card-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:16px;}
 
   /* ── TABLES ── */
-  .data-table { width: 100%; border-collapse: collapse; }
-  .data-table th {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 600;
-    text-align: left;
-    padding: 0 0 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .data-table th:not(:first-child) { text-align: right; }
-  .data-table td {
-    padding: 12px 0;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 400;
-  }
-  .data-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
-  .data-table tr:last-child td { border-bottom: none; }
-  .data-table .campaign-name { font-weight: 600; color: var(--text); }
-  .data-table .platform-badge {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: var(--surface2);
-    border: 1px solid var(--border-light);
-    color: var(--text-dim);
-    font-weight: 600;
-  }
-  .data-table .highlight { color: #fff; font-weight: 700; }
+  .data-table{width:100%;border-collapse:collapse;}
+  .data-table th{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);font-weight:600;text-align:left;padding:0 0 10px 0;border-bottom:1px solid var(--border);}
+  .data-table th:not(:first-child){text-align:right;}
+  .data-table td{padding:10px 0;font-size:12px;border-bottom:1px solid var(--border);font-weight:400;}
+  .data-table td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table .name{font-weight:600;color:var(--text);}
+  .data-table .badge{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--surface2);border:1px solid var(--border-light);color:var(--text-dim);font-weight:600;}
+  .data-table .hl{color:var(--cyan);font-weight:700;}
+  .data-table .hl-lime{color:var(--lime);font-weight:700;}
+  .data-table .total-row td{border-top:2px solid var(--border-light);font-weight:700;color:var(--cyan);padding-top:14px;}
 
   /* ── FUNNEL ── */
-  .funnel { display: flex; flex-direction: column; gap: 6px; }
-  .funnel-step {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .funnel-label {
-    width: 130px;
-    font-size: 12px;
-    color: var(--text-dim);
-    text-align: right;
-    flex-shrink: 0;
-    font-weight: 500;
-  }
-  .funnel-bar-container {
-    flex: 1;
-    height: 36px;
-    background: var(--surface2);
-    border-radius: 6px;
-    overflow: hidden;
-    position: relative;
-  }
-  .funnel-bar {
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.06));
-    border-radius: 6px;
-    transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-  }
-  .funnel-bar::after {
-    content: '';
-    position: absolute;
-    right: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 1px;
-  }
-  .funnel-value {
-    width: 80px;
-    font-size: 13px;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    flex-shrink: 0;
-  }
-  .funnel-pct {
-    width: 50px;
-    font-size: 11px;
-    color: var(--text-muted);
-    flex-shrink: 0;
-    text-align: right;
-  }
+  .funnel{display:flex;flex-direction:column;gap:5px;}
+  .funnel-step{display:flex;align-items:center;gap:12px;}
+  .funnel-label{width:110px;font-size:11px;color:var(--text-dim);text-align:right;flex-shrink:0;font-weight:500;}
+  .funnel-bar-wrap{flex:1;height:32px;background:var(--surface2);border-radius:5px;overflow:hidden;}
+  .funnel-bar{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan-glow));border-radius:5px;position:relative;}
+  .funnel-bar::after{content:'';position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--cyan);border-radius:1px;opacity:0.4;}
+  .funnel-val{width:70px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .funnel-pct{width:45px;font-size:10px;color:var(--text-muted);text-align:right;}
 
-  /* ── HORIZONTAL BAR ── */
-  .h-bars { display: flex; flex-direction: column; gap: 14px; }
-  .h-bar-row { display: flex; align-items: center; gap: 12px; }
-  .h-bar-label { width: 100px; font-size: 12px; color: var(--text-dim); font-weight: 500; text-align: right; flex-shrink: 0; }
-  .h-bar-track { flex: 1; height: 24px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
-  .h-bar-fill { height: 100%; background: rgba(255,255,255,0.12); border-radius: 4px; }
-  .h-bar-val { width: 60px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  /* ── H-BARS ── */
+  .h-bars{display:flex;flex-direction:column;gap:12px;}
+  .h-bar-row{display:flex;align-items:center;gap:10px;}
+  .h-bar-label{width:90px;font-size:11px;color:var(--text-dim);font-weight:500;text-align:right;flex-shrink:0;}
+  .h-bar-track{flex:1;height:22px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+  .h-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan-glow));border-radius:4px;}
+  .h-bar-fill.lime{background:linear-gradient(90deg,var(--lime-dim),var(--lime-glow));}
+  .h-bar-val{width:55px;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;}
 
-  /* ── DONUT CHART (CSS) ── */
-  .donut-container { display: flex; align-items: center; gap: 32px; }
-  .donut-chart {
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    position: relative;
-    flex-shrink: 0;
-  }
-  .donut-hole {
-    position: absolute;
-    width: 80px; height: 80px;
-    background: var(--surface);
-    border-radius: 50%;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .donut-hole-val { font-size: 20px; font-weight: 800; }
-  .donut-hole-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-  .donut-legend { display: flex; flex-direction: column; gap: 10px; }
-  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  /* ── DONUT ── */
+  .donut-container{display:flex;align-items:center;gap:28px;}
+  .donut-chart{width:120px;height:120px;border-radius:50%;position:relative;flex-shrink:0;}
+  .donut-hole{position:absolute;width:70px;height:70px;background:var(--surface);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .donut-hole-val{font-size:18px;font-weight:800;}
+  .donut-hole-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+  .donut-legend{display:flex;flex-direction:column;gap:8px;}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:11px;}
+  .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-  /* ── PACING BARS ── */
-  .pacing-item { margin-bottom: 20px; }
-  .pacing-item:last-child { margin-bottom: 0; }
-  .pacing-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .pacing-label { font-size: 12px; font-weight: 600; }
-  .pacing-values { font-size: 12px; color: var(--text-dim); }
-  .pacing-values span { color: var(--text); font-weight: 600; }
-  .pacing-track { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; position: relative; }
-  .pacing-fill { height: 100%; border-radius: 4px; background: rgba(255,255,255,0.2); }
-  .pacing-fill.exceeding { background: rgba(255,255,255,0.35); }
-  .pacing-fill.behind { background: rgba(255,255,255,0.08); }
-  .pacing-status {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 6px;
-    font-weight: 600;
-  }
-  .pacing-status.on-track { color: var(--text-dim); }
-  .pacing-status.exceeding { color: #fff; }
-  .pacing-status.behind { color: var(--text-muted); }
+  /* ── PACING ── */
+  .pacing-item{margin-bottom:18px;}
+  .pacing-item:last-child{margin-bottom:0;}
+  .pacing-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+  .pacing-label{font-size:12px;font-weight:600;}
+  .pacing-values{font-size:11px;color:var(--text-dim);}
+  .pacing-values span{color:var(--text);font-weight:600;}
+  .pacing-track{height:7px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+  .pacing-fill{height:100%;border-radius:4px;background:var(--cyan-dim);}
+  .pacing-fill.exceeding{background:linear-gradient(90deg,var(--lime-dim),var(--lime));opacity:0.6;}
+  .pacing-fill.behind{background:rgba(255,255,255,0.06);}
+  .pacing-status{font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:5px;font-weight:600;}
+  .pacing-status.on-track{color:var(--cyan);}
+  .pacing-status.exceeding{color:var(--lime);}
+  .pacing-status.behind{color:var(--text-muted);}
 
   /* ── STAT GRID ── */
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .stat-box {
-    background: var(--surface2);
-    border-radius: 10px;
-    padding: 16px;
-    border: 1px solid var(--border);
-  }
-  .stat-box-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-  .stat-box-value { font-size: 22px; font-weight: 800; }
-  .stat-box-change { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .stat-box{background:var(--surface2);border-radius:10px;padding:14px;border:1px solid var(--border);}
+  .stat-box-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+  .stat-box-value{font-size:20px;font-weight:800;}
+  .stat-box-change{font-size:10px;color:var(--cyan);margin-top:3px;}
+  .stat-box-change.down{color:var(--text-muted);}
 
-  /* ── SPARKLINE ── */
-  .forecast-row { display: flex; flex-direction: column; gap: 12px; }
-  .forecast-item {
-    display: flex;
-    align-items: center;
-    padding: 14px 16px;
-    background: var(--surface2);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    gap: 16px;
-  }
-  .forecast-period { font-size: 12px; font-weight: 600; width: 130px; flex-shrink: 0; }
-  .forecast-range { flex: 1; position: relative; height: 20px; }
-  .forecast-range-bar { position: absolute; top: 8px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
-  .forecast-range-point { position: absolute; top: 4px; width: 12px; height: 12px; background: #fff; border-radius: 50%; }
-  .forecast-val { width: 80px; text-align: right; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .forecast-conf { width: 40px; text-align: right; font-size: 11px; color: var(--text-muted); }
+  /* ── FORECAST ── */
+  .forecast-row{display:flex;flex-direction:column;gap:10px;}
+  .forecast-item{display:flex;align-items:center;padding:12px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);gap:14px;}
+  .forecast-period{font-size:11px;font-weight:600;width:120px;flex-shrink:0;}
+  .forecast-range{flex:1;position:relative;height:18px;}
+  .forecast-range-bar{position:absolute;top:7px;height:4px;background:var(--cyan-dim);border-radius:2px;}
+  .forecast-range-point{position:absolute;top:3px;width:12px;height:12px;background:var(--cyan);border-radius:50%;box-shadow:0 0 8px var(--cyan-dim);}
+  .forecast-val{width:70px;text-align:right;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .forecast-conf{width:36px;text-align:right;font-size:10px;color:var(--text-muted);}
+
+  /* ── KEYWORD QUALITY ── */
+  .qs-badge{display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:6px;font-size:11px;font-weight:700;}
+  .qs-high{background:var(--lime-dim);color:var(--lime);}
+  .qs-med{background:var(--cyan-dim);color:var(--cyan);}
+  .qs-low{background:rgba(255,255,255,0.05);color:var(--text-muted);}
+
+  /* ── COHORT TABLE ── */
+  .cohort-bar{display:inline-block;height:6px;border-radius:3px;background:var(--cyan);opacity:0.5;vertical-align:middle;margin-left:6px;}
 
   /* ── FOOTER ── */
-  .footer {
-    padding: 32px 64px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .animate { animation: fadeUp 0.6s ease-out both; }
-  .delay-1 { animation-delay: 0.1s; }
-  .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
-  .delay-4 { animation-delay: 0.4s; }
+  .footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <h1>Platinumlist — Dream Report</h1>
     <h2>Dubai Jazz Festival 2026</h2>
   </div>
   <div class="header-right">
-    Report Period: <span>Jan 15 – 29, 2026</span><br>
+    Period: <span>Jan 15 – 29, 2026</span><br>
     Generated: <span>Jan 29, 2026</span>
   </div>
 </div>
 
-<div class="main">
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="campaigns">Campaigns</div>
+  <div class="tab" data-tab="keywords">Keywords</div>
+  <div class="tab" data-tab="creatives">Creatives</div>
+  <div class="tab" data-tab="funnel">Funnel & Cart</div>
+  <div class="tab" data-tab="audience">Audience</div>
+  <div class="tab" data-tab="customers">Customers</div>
+  <div class="tab" data-tab="forecast">Forecast</div>
+</div>
 
-  <!-- KPI ROW -->
-  <div class="kpi-row animate">
-    <div class="kpi">
-      <div class="kpi-label">Total Spend</div>
-      <div class="kpi-value">$47.8K</div>
-      <span class="kpi-change up">↑ 12.3%</span>
-      <div class="kpi-sub">vs previous period</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Revenue</div>
-      <div class="kpi-value">$312.5K</div>
-      <span class="kpi-change up">↑ 18.7%</span>
-      <div class="kpi-sub">2,341 purchases</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">ROAS</div>
-      <div class="kpi-value">6.53×</div>
-      <span class="kpi-change up">↑ 5.7%</span>
-      <div class="kpi-sub">target: 5.0×</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">New Customers</div>
-      <div class="kpi-value">1,847</div>
-      <span class="kpi-change up">↑ 22.1%</span>
-      <div class="kpi-sub">62% of total purchases</div>
-    </div>
+<!-- ═══════════════ OVERVIEW TAB ═══════════════ -->
+<div class="tab-content active" id="overview">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-label">Total Spend</div><div class="kpi-value">$47.8K</div><span class="kpi-change up">↑ 12.3%</span><div class="kpi-sub">vs previous period</div></div>
+    <div class="kpi"><div class="kpi-label">Revenue</div><div class="kpi-value">$312.5K</div><span class="kpi-change up">↑ 18.7%</span><div class="kpi-sub">2,341 purchases</div></div>
+    <div class="kpi"><div class="kpi-label">ROAS</div><div class="kpi-value">6.53×</div><span class="kpi-change lime">↑ 5.7%</span><div class="kpi-sub">target: 5.0×</div></div>
+    <div class="kpi"><div class="kpi-label">New Customers</div><div class="kpi-value">1,847</div><span class="kpi-change up">↑ 22.1%</span><div class="kpi-sub">62% of purchases</div></div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-label">Sessions</div><div class="kpi-value">48.3K</div><span class="kpi-change up">↑ 15.4%</span></div>
+    <div class="kpi"><div class="kpi-label">CVR</div><div class="kpi-value">4.85%</div><span class="kpi-change up">↑ 3.2%</span></div>
+    <div class="kpi"><div class="kpi-label">Avg Order Value</div><div class="kpi-value">$133</div><span class="kpi-change down">↓ 2.8%</span></div>
+    <div class="kpi"><div class="kpi-label">Cart Abandonment</div><div class="kpi-value">67.2%</div><span class="kpi-change up">↑ 2.3% improved</span></div>
   </div>
 
-  <!-- KPI ROW 2 -->
-  <div class="kpi-row animate delay-1" style="margin-bottom:48px;">
-    <div class="kpi">
-      <div class="kpi-label">Sessions</div>
-      <div class="kpi-value">48.3K</div>
-      <span class="kpi-change up">↑ 15.4%</span>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Conversion Rate</div>
-      <div class="kpi-value">4.85%</div>
-      <span class="kpi-change up">↑ 3.2%</span>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Avg Order Value</div>
-      <div class="kpi-value">$133</div>
-      <span class="kpi-change down">↓ 2.8%</span>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Cart Abandonment</div>
-      <div class="kpi-value">67.2%</div>
-      <span class="kpi-change up">↑ 2.3% improved</span>
-    </div>
-  </div>
-
-  <!-- PACING TO GOALS -->
   <div class="section-title">Pacing to Goals</div>
-  <div class="card animate delay-2" style="margin-bottom:48px;">
+  <div class="card full">
     <div class="pacing-item">
-      <div class="pacing-header">
-        <div class="pacing-label">Monthly Revenue</div>
-        <div class="pacing-values"><span>$312,450</span> / $500,000</div>
-      </div>
+      <div class="pacing-header"><div class="pacing-label">Monthly Revenue</div><div class="pacing-values"><span>$312,450</span> / $500,000</div></div>
       <div class="pacing-track"><div class="pacing-fill" style="width:62.5%"></div></div>
       <div class="pacing-status on-track">● On Track — 62.5%</div>
     </div>
     <div class="pacing-item">
-      <div class="pacing-header">
-        <div class="pacing-label">New Customers</div>
-        <div class="pacing-values"><span>1,847</span> / 3,000</div>
-      </div>
+      <div class="pacing-header"><div class="pacing-label">New Customers</div><div class="pacing-values"><span>1,847</span> / 3,000</div></div>
       <div class="pacing-track"><div class="pacing-fill" style="width:61.6%"></div></div>
       <div class="pacing-status on-track">● On Track — 61.6%</div>
     </div>
     <div class="pacing-item">
-      <div class="pacing-header">
-        <div class="pacing-label">ROAS Target</div>
-        <div class="pacing-values"><span>6.53×</span> / 5.0×</div>
-      </div>
+      <div class="pacing-header"><div class="pacing-label">ROAS Target</div><div class="pacing-values"><span>6.53×</span> / 5.0×</div></div>
       <div class="pacing-track"><div class="pacing-fill exceeding" style="width:100%"></div></div>
       <div class="pacing-status exceeding">◆ Exceeding — 130.6%</div>
     </div>
     <div class="pacing-item">
-      <div class="pacing-header">
-        <div class="pacing-label">Ticket Sales</div>
-        <div class="pacing-values"><span>2,341</span> / 5,000</div>
-      </div>
+      <div class="pacing-header"><div class="pacing-label">Ticket Sales</div><div class="pacing-values"><span>2,341</span> / 5,000</div></div>
       <div class="pacing-track"><div class="pacing-fill behind" style="width:46.8%"></div></div>
       <div class="pacing-status behind">○ Behind — 46.8%</div>
     </div>
   </div>
 
-  <!-- CAMPAIGN PERFORMANCE + FUNNEL -->
-  <div class="section-title">Campaign Performance</div>
-  <div class="card animate delay-2" style="margin-bottom:48px; overflow-x:auto;">
+  <div class="section-title">Top 5 Campaigns by Revenue</div>
+  <div class="card full">
     <table class="data-table">
-      <thead>
-        <tr>
-          <th style="width:26%">Campaign</th>
-          <th>Platform</th>
-          <th>Spend</th>
-          <th>Revenue</th>
-          <th>ROAS</th>
-          <th>CVR</th>
-          <th>Purchases</th>
-        </tr>
-      </thead>
+      <thead><tr><th style="width:28%">Campaign</th><th>Platform</th><th>Spend</th><th>Revenue</th><th>ROAS</th><th>CVR</th><th>Purchases</th></tr></thead>
       <tbody>
-        <tr><td class="campaign-name">Jazz Festival Lookalike</td><td><span class="platform-badge">Meta</span></td><td>$12,450</td><td class="highlight">$98,320</td><td class="highlight">7.90×</td><td>5.82%</td><td>687</td></tr>
-        <tr><td class="campaign-name">Dubai Events Brand</td><td><span class="platform-badge">Google</span></td><td>$8,230</td><td class="highlight">$67,450</td><td class="highlight">8.20×</td><td>6.12%</td><td>512</td></tr>
-        <tr><td class="campaign-name">Retargeting Cart Abandon</td><td><span class="platform-badge">Meta</span></td><td>$5,670</td><td>$52,180</td><td class="highlight">9.20×</td><td>5.00%</td><td>398</td></tr>
-        <tr><td class="campaign-name">Jazz Concert Generic</td><td><span class="platform-badge">Google</span></td><td>$9,840</td><td>$48,290</td><td>4.91×</td><td>2.00%</td><td>356</td></tr>
-        <tr><td class="campaign-name">Interest Music Festivals</td><td><span class="platform-badge">Meta</span></td><td>$11,642</td><td>$46,210</td><td>3.97×</td><td>2.00%</td><td>388</td></tr>
-        <tr><td class="campaign-name">Instagram Stories Promo</td><td><span class="platform-badge">Meta</span></td><td>$3,890</td><td>$31,240</td><td class="highlight">8.03×</td><td>2.00%</td><td>234</td></tr>
-        <tr><td class="campaign-name">YouTube Pre-Roll Jazz</td><td><span class="platform-badge">Google</span></td><td>$4,320</td><td>$24,560</td><td>5.69×</td><td>1.00%</td><td>187</td></tr>
-        <tr><td class="campaign-name">Search — Concerts Dubai</td><td><span class="platform-badge">Google</span></td><td>$2,890</td><td>$19,340</td><td>6.69×</td><td>6.00%</td><td>145</td></tr>
-        <tr><td class="campaign-name">Display Remarketing</td><td><span class="platform-badge">Google</span></td><td>$1,450</td><td>$12,870</td><td class="highlight">8.88×</td><td>0.50%</td><td>98</td></tr>
-        <tr><td class="campaign-name">Broad Interest UAE</td><td><span class="platform-badge">Meta</span></td><td>$2,450</td><td>$11,990</td><td>4.89×</td><td>1.00%</td><td>136</td></tr>
+        <tr><td class="name">Jazz Festival Lookalike</td><td><span class="badge">Meta</span></td><td>$12,450</td><td class="hl">$98,320</td><td class="hl">7.90×</td><td>5.82%</td><td>687</td></tr>
+        <tr><td class="name">Dubai Events Brand</td><td><span class="badge">Google</span></td><td>$8,230</td><td class="hl">$67,450</td><td class="hl">8.20×</td><td>6.12%</td><td>512</td></tr>
+        <tr><td class="name">Retargeting Cart Abandon</td><td><span class="badge">Meta</span></td><td>$5,670</td><td>$52,180</td><td class="hl-lime">9.20×</td><td>5.00%</td><td>398</td></tr>
+        <tr><td class="name">Jazz Concert Generic</td><td><span class="badge">Google</span></td><td>$9,840</td><td>$48,290</td><td>4.91×</td><td>2.00%</td><td>356</td></tr>
+        <tr><td class="name">Interest Music Festivals</td><td><span class="badge">Meta</span></td><td>$11,642</td><td>$46,210</td><td>3.97×</td><td>2.00%</td><td>388</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ CAMPAIGNS TAB ═══════════════ -->
+<div class="tab-content" id="campaigns">
+  <div class="section-title">All Campaign Performance</div>
+  <div class="card full" style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th style="width:22%">Campaign</th><th>Platform</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>Sessions</th><th>Purchases</th><th>Revenue</th><th>ROAS</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Jazz Festival Lookalike</td><td><span class="badge">Meta</span></td><td>$12,450</td><td>1,245,000</td><td>18,675</td><td>1.50%</td><td>$0.67</td><td>15,230</td><td>687</td><td class="hl">$98,320</td><td class="hl-lime">7.90×</td></tr>
+        <tr><td class="name">Dubai Events Brand</td><td><span class="badge">Google</span></td><td>$8,230</td><td>412,000</td><td>24,720</td><td>6.00%</td><td>$0.33</td><td>21,340</td><td>512</td><td class="hl">$67,450</td><td class="hl-lime">8.20×</td></tr>
+        <tr><td class="name">Retargeting Cart Abandon</td><td><span class="badge">Meta</span></td><td>$5,670</td><td>234,000</td><td>11,700</td><td>5.00%</td><td>$0.48</td><td>9,870</td><td>398</td><td>$52,180</td><td class="hl-lime">9.20×</td></tr>
+        <tr><td class="name">Jazz Concert Generic</td><td><span class="badge">Google</span></td><td>$9,840</td><td>1,968,000</td><td>39,360</td><td>2.00%</td><td>$0.25</td><td>32,450</td><td>356</td><td>$48,290</td><td>4.91×</td></tr>
+        <tr><td class="name">Interest Music Festivals</td><td><span class="badge">Meta</span></td><td>$11,642</td><td>1,164,200</td><td>23,284</td><td>2.00%</td><td>$0.50</td><td>18,760</td><td>388</td><td>$46,210</td><td>3.97×</td></tr>
+        <tr><td class="name">Instagram Stories Promo</td><td><span class="badge">Meta</span></td><td>$3,890</td><td>778,000</td><td>15,560</td><td>2.00%</td><td>$0.25</td><td>12,340</td><td>234</td><td>$31,240</td><td class="hl">8.03×</td></tr>
+        <tr><td class="name">YouTube Pre-Roll Jazz</td><td><span class="badge">Google</span></td><td>$4,320</td><td>864,000</td><td>8,640</td><td>1.00%</td><td>$0.50</td><td>6,540</td><td>187</td><td>$24,560</td><td>5.69×</td></tr>
+        <tr><td class="name">Search — Concerts Dubai</td><td><span class="badge">Google</span></td><td>$2,890</td><td>144,500</td><td>8,670</td><td>6.00%</td><td>$0.33</td><td>7,230</td><td>145</td><td>$19,340</td><td>6.69×</td></tr>
+        <tr><td class="name">Display Remarketing</td><td><span class="badge">Google</span></td><td>$1,450</td><td>725,000</td><td>3,625</td><td>0.50%</td><td>$0.40</td><td>2,980</td><td>98</td><td>$12,870</td><td class="hl-lime">8.88×</td></tr>
+        <tr><td class="name">Broad Interest UAE</td><td><span class="badge">Meta</span></td><td>$2,450</td><td>980,000</td><td>9,800</td><td>1.00%</td><td>$0.25</td><td>7,650</td><td>136</td><td>$11,990</td><td>4.89×</td></tr>
+        <tr class="total-row"><td class="name">Total</td><td></td><td>$62,832</td><td>8,514,700</td><td>164,034</td><td></td><td></td><td>134,390</td><td>3,141</td><td>$412,450</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ KEYWORDS TAB ═══════════════ -->
+<div class="tab-content" id="keywords">
+  <div class="section-title">Google Ads — Top Keywords</div>
+  <div class="card full" style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th style="width:22%">Keyword</th><th>Match</th><th>QS</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>Conv</th><th>Conv Rate</th><th>ROAS</th><th>Imp Share</th></tr></thead>
+      <tbody>
+        <tr><td class="name">platinumlist tickets</td><td>Exact</td><td><span class="qs-badge qs-high">10</span></td><td>28,000</td><td>5,600</td><td class="hl">20.0%</td><td>$0.25</td><td>456</td><td class="hl-lime">8.14%</td><td class="hl-lime">12.4×</td><td>95%</td></tr>
+        <tr><td class="name">dubai jazz festival tickets</td><td>Exact</td><td><span class="qs-badge qs-high">9</span></td><td>45,000</td><td>6,750</td><td>15.0%</td><td>$0.45</td><td>425</td><td class="hl">6.30%</td><td class="hl">9.2×</td><td>78%</td></tr>
+        <tr><td class="name">jazz festival dubai 2026</td><td>Exact</td><td><span class="qs-badge qs-high">9</span></td><td>38,000</td><td>5,320</td><td>14.0%</td><td>$0.42</td><td>356</td><td class="hl">6.69%</td><td class="hl">8.8×</td><td>82%</td></tr>
+        <tr><td class="name">buy concert tickets dubai</td><td>Phrase</td><td><span class="qs-badge qs-med">8</span></td><td>52,000</td><td>4,680</td><td>9.0%</td><td>$0.52</td><td>287</td><td>6.13%</td><td>7.8×</td><td>67%</td></tr>
+        <tr><td class="name">jazz concerts near me</td><td>Phrase</td><td><span class="qs-badge qs-med">8</span></td><td>67,000</td><td>5,360</td><td>8.0%</td><td>$0.48</td><td>234</td><td>4.37%</td><td>6.2×</td><td>61%</td></tr>
+        <tr><td class="name">concerts in dubai</td><td>Phrase</td><td><span class="qs-badge qs-med">7</span></td><td>125,000</td><td>8,750</td><td>7.0%</td><td>$0.38</td><td>287</td><td>3.28%</td><td>5.4×</td><td>45%</td></tr>
+        <tr><td class="name">dubai events february</td><td>Phrase</td><td><span class="qs-badge qs-med">7</span></td><td>89,000</td><td>5,340</td><td>6.0%</td><td>$0.35</td><td>198</td><td>3.71%</td><td>4.9×</td><td>52%</td></tr>
+        <tr><td class="name">outdoor concerts dubai</td><td>Phrase</td><td><span class="qs-badge qs-low">6</span></td><td>45,000</td><td>2,700</td><td>6.0%</td><td>$0.42</td><td>98</td><td>3.63%</td><td>4.5×</td><td>42%</td></tr>
+        <tr><td class="name">live music dubai</td><td>Broad</td><td><span class="qs-badge qs-low">6</span></td><td>156,000</td><td>7,800</td><td>5.0%</td><td>$0.32</td><td>178</td><td>2.28%</td><td>3.8×</td><td>38%</td></tr>
+        <tr><td class="name">weekend events dubai</td><td>Broad</td><td><span class="qs-badge qs-low">5</span></td><td>234,000</td><td>9,360</td><td>4.0%</td><td>$0.28</td><td>156</td><td>1.67%</td><td>2.8×</td><td>28%</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- FUNNEL + CART -->
-  <div class="section-title">Purchase Funnel</div>
-  <div class="two-col" style="margin-bottom:48px;">
-    <div class="card animate delay-2">
-      <div class="card-title">Conversion Funnel</div>
-      <div class="funnel">
-        <div class="funnel-step"><div class="funnel-label">Sessions</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:100%"></div></div><div class="funnel-value">48,293</div><div class="funnel-pct">100%</div></div>
-        <div class="funnel-step"><div class="funnel-label">Product View</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:80%"></div></div><div class="funnel-value">38,634</div><div class="funnel-pct">80%</div></div>
-        <div class="funnel-step"><div class="funnel-label">Add to Cart</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:32%"></div></div><div class="funnel-value">15,454</div><div class="funnel-pct">32%</div></div>
-        <div class="funnel-step"><div class="funnel-label">Checkout</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:16%"></div></div><div class="funnel-value">7,727</div><div class="funnel-pct">16%</div></div>
-        <div class="funnel-step"><div class="funnel-label">Payment Info</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:11.2%"></div></div><div class="funnel-value">5,409</div><div class="funnel-pct">11.2%</div></div>
-        <div class="funnel-step"><div class="funnel-label">Purchase</div><div class="funnel-bar-container"><div class="funnel-bar" style="width:4.85%"></div></div><div class="funnel-value">2,341</div><div class="funnel-pct">4.85%</div></div>
+  <div class="section-title" style="margin-top:32px;">Scale Opportunity</div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">High ROAS + Low Impression Share</div>
+      <div style="font-size:12px;color:var(--text-dim);line-height:1.8;">
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span class="name">platinumlist tickets</span><span><span class="hl-lime">12.4× ROAS</span> · 95% share</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span class="name">dubai jazz festival tickets</span><span><span class="hl">9.2× ROAS</span> · 78% share</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span class="name">jazz festival dubai 2026</span><span><span class="hl">8.8× ROAS</span> · 82% share</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;"><span class="name">buy concert tickets dubai</span><span><span class="hl">7.8× ROAS</span> · 67% share</span></div>
       </div>
     </div>
-    <div class="card animate delay-3">
-      <div class="card-title">Cart & Order Metrics</div>
-      <div class="stat-grid">
-        <div class="stat-box">
-          <div class="stat-box-label">Avg Cart Value</div>
-          <div class="stat-box-value">$133</div>
-          <div class="stat-box-change">↓ 2.8%</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-box-label">Median Cart</div>
-          <div class="stat-box-value">$119</div>
-          <div class="stat-box-change">↑ 1.2%</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-box-label">Rev / Session</div>
-          <div class="stat-box-value">$6.47</div>
-          <div class="stat-box-change">↑ 3.4%</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-box-label">Avg Cart Size</div>
-          <div class="stat-box-value">2.3</div>
-          <div class="stat-box-change">↑ 5.2%</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-box-label">Multi-Item %</div>
-          <div class="stat-box-value">66%</div>
-          <div class="stat-box-change">↑ 8.1%</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-box-label">Recovery Rate</div>
-          <div class="stat-box-value">12.4%</div>
-          <div class="stat-box-change">↑ 1.8%</div>
-        </div>
-      </div>
-      <div style="margin-top:20px; padding:16px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
-        <div class="stat-box-label" style="margin-bottom:4px">Abandoned Cart Value</div>
-        <div style="font-size:24px; font-weight:800;">$523,450</div>
-        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">↑ 5.6% improvement · $64,908 recovered</div>
+    <div class="card">
+      <div class="card-title">Impression Share Gap</div>
+      <div class="h-bars">
+        <div class="h-bar-row"><div class="h-bar-label">platinumlist</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:95%"></div></div><div class="h-bar-val">95%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">jazz fest 2026</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:82%"></div></div><div class="h-bar-val">82%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">jazz fest tickets</div><div class="h-bar-track"><div class="h-bar-fill" style="width:78%"></div></div><div class="h-bar-val">78%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">buy tickets</div><div class="h-bar-track"><div class="h-bar-fill" style="width:67%"></div></div><div class="h-bar-val">67%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">concerts near</div><div class="h-bar-track"><div class="h-bar-fill" style="width:61%"></div></div><div class="h-bar-val">61%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">events feb</div><div class="h-bar-track"><div class="h-bar-fill" style="width:52%"></div></div><div class="h-bar-val">52%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">concerts dubai</div><div class="h-bar-track"><div class="h-bar-fill" style="width:45%"></div></div><div class="h-bar-val">45%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">live music</div><div class="h-bar-track"><div class="h-bar-fill" style="width:38%"></div></div><div class="h-bar-val">38%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">weekend events</div><div class="h-bar-track"><div class="h-bar-fill" style="width:28%"></div></div><div class="h-bar-val">28%</div></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- GEO + DEMOGRAPHICS -->
-  <div class="section-title">Geography & Audience</div>
-  <div class="three-col" style="margin-bottom:48px;">
-    <!-- GEO -->
-    <div class="card animate delay-2">
+<!-- ═══════════════ CREATIVES TAB ═══════════════ -->
+<div class="tab-content" id="creatives">
+  <div class="section-title">Creative Assets Performance</div>
+  <div class="card full" style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th style="width:24%">Asset</th><th>Type</th><th>Platform</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Conv</th><th>ROAS</th><th>View Rate</th><th>Fatigue</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Festival Vibe Reel 15s</td><td>Video</td><td><span class="badge">Meta</span></td><td>298,000</td><td>11,920</td><td class="hl">4.00%</td><td>187</td><td class="hl-lime">9.1×</td><td>72%</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">Jazz Festival Hero 30s</td><td>Video</td><td><span class="badge">Meta</span></td><td>567,000</td><td>17,010</td><td>3.00%</td><td>245</td><td class="hl">8.2×</td><td>68%</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">Instagram Stories Promo</td><td>Video</td><td><span class="badge">Meta</span></td><td>198,000</td><td>7,920</td><td class="hl">4.00%</td><td>134</td><td>7.8×</td><td>58%</td><td style="color:var(--cyan)">Med</td></tr>
+        <tr><td class="name">Artist Lineup Carousel</td><td>Carousel</td><td><span class="badge">Meta</span></td><td>423,000</td><td>12,690</td><td>3.00%</td><td>198</td><td>7.4×</td><td>—</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">YouTube PreRoll 15s</td><td>Video</td><td><span class="badge">Google</span></td><td>234,000</td><td>4,680</td><td>2.00%</td><td>112</td><td>6.9×</td><td>45%</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">Early Bird Promo Static</td><td>Image</td><td><span class="badge">Meta</span></td><td>389,000</td><td>7,780</td><td>2.00%</td><td>156</td><td>6.8×</td><td>—</td><td style="color:var(--cyan)">Med</td></tr>
+        <tr><td class="name">Ticket Price Comparison</td><td>Carousel</td><td><span class="badge">Meta</span></td><td>156,000</td><td>4,680</td><td>3.00%</td><td>87</td><td>6.1×</td><td>—</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">Festival Map Interactive</td><td>Image</td><td><span class="badge">Meta</span></td><td>89,000</td><td>2,670</td><td>3.00%</td><td>45</td><td>5.8×</td><td>—</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">Display Banner 300×250</td><td>Display</td><td><span class="badge">Google</span></td><td>456,000</td><td>4,560</td><td>1.00%</td><td>89</td><td>5.2×</td><td>—</td><td style="color:var(--lime)">Low</td></tr>
+        <tr><td class="name">Headliner Announcement</td><td>Image</td><td><span class="badge">Meta</span></td><td>345,000</td><td>6,900</td><td>2.00%</td><td>98</td><td>4.2×</td><td>—</td><td style="color:var(--text-muted)">High</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ FUNNEL TAB ═══════════════ -->
+<div class="tab-content" id="funnel">
+  <div class="two-col">
+    <div>
+      <div class="section-title">Conversion Funnel</div>
+      <div class="card">
+        <div class="funnel">
+          <div class="funnel-step"><div class="funnel-label">Sessions</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"></div></div><div class="funnel-val">48,293</div><div class="funnel-pct">100%</div></div>
+          <div class="funnel-step"><div class="funnel-label">Product View</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:80%"></div></div><div class="funnel-val">38,634</div><div class="funnel-pct">80%</div></div>
+          <div class="funnel-step"><div class="funnel-label">Add to Cart</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:32%"></div></div><div class="funnel-val">15,454</div><div class="funnel-pct">32%</div></div>
+          <div class="funnel-step"><div class="funnel-label">Checkout</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:16%"></div></div><div class="funnel-val">7,727</div><div class="funnel-pct">16%</div></div>
+          <div class="funnel-step"><div class="funnel-label">Payment Info</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:11.2%"></div></div><div class="funnel-val">5,409</div><div class="funnel-pct">11.2%</div></div>
+          <div class="funnel-step"><div class="funnel-label">Purchase</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:4.85%"></div></div><div class="funnel-val">2,341</div><div class="funnel-pct">4.85%</div></div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:28px;">Funnel by Source</div>
+      <div class="card" style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Source</th><th>Sessions</th><th>View</th><th>Cart</th><th>Checkout</th><th>Purchase</th><th>CVR</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Direct</td><td>2,053</td><td>88%</td><td>45%</td><td>62%</td><td>55%</td><td class="hl-lime">7.12%</td></tr>
+            <tr><td class="name">Organic Search</td><td>3,230</td><td>85%</td><td>42%</td><td>58%</td><td>52%</td><td class="hl">6.78%</td></tr>
+            <tr><td class="name">Meta Ads</td><td>24,560</td><td>82%</td><td>35%</td><td>52%</td><td>45%</td><td>5.32%</td></tr>
+            <tr><td class="name">Google Ads</td><td>18,450</td><td>78%</td><td>38%</td><td>48%</td><td>42%</td><td>4.21%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Cart & Order Metrics</div>
+      <div class="card">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="stat-box-label">Avg Cart Value</div><div class="stat-box-value">$133</div><div class="stat-box-change down">↓ 2.8%</div></div>
+          <div class="stat-box"><div class="stat-box-label">Median Cart</div><div class="stat-box-value">$119</div><div class="stat-box-change">↑ 1.2%</div></div>
+          <div class="stat-box"><div class="stat-box-label">Rev / Session</div><div class="stat-box-value">$6.47</div><div class="stat-box-change">↑ 3.4%</div></div>
+          <div class="stat-box"><div class="stat-box-label">Avg Cart Size</div><div class="stat-box-value">2.3</div><div class="stat-box-change">↑ 5.2%</div></div>
+          <div class="stat-box"><div class="stat-box-label">Multi-Item %</div><div class="stat-box-value">66%</div><div class="stat-box-change">↑ 8.1%</div></div>
+          <div class="stat-box"><div class="stat-box-label">Recovery Rate</div><div class="stat-box-value">12.4%</div><div class="stat-box-change">↑ 1.8%</div></div>
+        </div>
+        <div style="margin-top:16px;padding:16px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);">
+          <div class="stat-box-label">Abandoned Cart Value</div>
+          <div style="font-size:24px;font-weight:800;margin-top:4px;">$523,450</div>
+          <div style="font-size:11px;color:var(--cyan);margin-top:4px;">↑ 5.6% improvement · $64,908 recovered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ AUDIENCE TAB ═══════════════ -->
+<div class="tab-content" id="audience">
+  <div class="three-col">
+    <div class="card">
       <div class="card-title">Revenue by Country</div>
       <div class="h-bars">
         <div class="h-bar-row"><div class="h-bar-label">UAE</div><div class="h-bar-track"><div class="h-bar-fill" style="width:100%"></div></div><div class="h-bar-val">$187K</div></div>
@@ -553,180 +399,173 @@
         <div class="h-bar-row"><div class="h-bar-label">India</div><div class="h-bar-track"><div class="h-bar-fill" style="width:9%"></div></div><div class="h-bar-val">$17K</div></div>
         <div class="h-bar-row"><div class="h-bar-label">US</div><div class="h-bar-track"><div class="h-bar-fill" style="width:6.6%"></div></div><div class="h-bar-val">$12K</div></div>
         <div class="h-bar-row"><div class="h-bar-label">Germany</div><div class="h-bar-track"><div class="h-bar-fill" style="width:3.6%"></div></div><div class="h-bar-val">$7K</div></div>
-        <div class="h-bar-row"><div class="h-bar-label">Other</div><div class="h-bar-track"><div class="h-bar-fill" style="width:4.6%"></div></div><div class="h-bar-val">$9K</div></div>
+      </div>
+      <div class="card-title" style="margin-top:24px;">Top Cities</div>
+      <div class="h-bars">
+        <div class="h-bar-row"><div class="h-bar-label">Dubai</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:100%"></div></div><div class="h-bar-val">$112K</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">Abu Dhabi</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:40.2%"></div></div><div class="h-bar-val">$45K</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">Riyadh</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:28%"></div></div><div class="h-bar-val">$31K</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">Sharjah</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:20.4%"></div></div><div class="h-bar-val">$23K</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">London</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:16.3%"></div></div><div class="h-bar-val">$18K</div></div>
       </div>
     </div>
 
-    <!-- AGE -->
-    <div class="card animate delay-3">
-      <div class="card-title">Age Distribution</div>
-      <div class="h-bars" style="margin-bottom:28px;">
-        <div class="h-bar-row"><div class="h-bar-label">18–24</div><div class="h-bar-track"><div class="h-bar-fill" style="width:26.7%"></div></div><div class="h-bar-val">12%</div></div>
-        <div class="h-bar-row"><div class="h-bar-label">25–34</div><div class="h-bar-track"><div class="h-bar-fill" style="width:100%"></div></div><div class="h-bar-val">42%</div></div>
+    <div class="card">
+      <div class="card-title">Age Distribution (Purchases)</div>
+      <div class="h-bars" style="margin-bottom:24px;">
+        <div class="h-bar-row"><div class="h-bar-label">18–24</div><div class="h-bar-track"><div class="h-bar-fill" style="width:28.6%"></div></div><div class="h-bar-val">12%</div></div>
+        <div class="h-bar-row"><div class="h-bar-label">25–34</div><div class="h-bar-track"><div class="h-bar-fill" style="width:100%"></div></div><div class="h-bar-val" style="color:var(--cyan)">42%</div></div>
         <div class="h-bar-row"><div class="h-bar-label">35–44</div><div class="h-bar-track"><div class="h-bar-fill" style="width:71.4%"></div></div><div class="h-bar-val">30%</div></div>
         <div class="h-bar-row"><div class="h-bar-label">45–54</div><div class="h-bar-track"><div class="h-bar-fill" style="width:26.2%"></div></div><div class="h-bar-val">11%</div></div>
         <div class="h-bar-row"><div class="h-bar-label">55+</div><div class="h-bar-track"><div class="h-bar-fill" style="width:11.9%"></div></div><div class="h-bar-val">5%</div></div>
       </div>
-      <div class="card-title">Top Converting Age</div>
-      <div style="display:flex;gap:12px;align-items:baseline;">
-        <span style="font-size:28px;font-weight:800;">25–34</span>
-        <span style="font-size:13px;color:var(--text-dim);">5.82% CVR</span>
+      <div style="padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <div><div class="stat-box-label">Top Converting Age</div><div style="font-size:22px;font-weight:800;margin-top:2px;">25–34</div></div>
+        <div style="text-align:right;"><div class="stat-box-label">CVR</div><div style="font-size:22px;font-weight:800;color:var(--cyan);margin-top:2px;">5.82%</div></div>
       </div>
     </div>
 
-    <!-- DEVICE + GENDER -->
-    <div class="card animate delay-4">
+    <div class="card">
       <div class="card-title">Device Split</div>
-      <div class="donut-container" style="margin-bottom:28px;">
-        <div class="donut-chart" style="background: conic-gradient(rgba(255,255,255,0.35) 0% 62%, rgba(255,255,255,0.15) 62% 97%, rgba(255,255,255,0.06) 97% 100%);">
-          <div class="donut-hole">
-            <div class="donut-hole-val">68%</div>
-            <div class="donut-hole-label">Mobile</div>
-          </div>
+      <div class="donut-container" style="margin-bottom:24px;">
+        <div class="donut-chart" style="background:conic-gradient(var(--cyan) 0% 62%,rgba(121,226,255,0.25) 62% 97%,rgba(121,226,255,0.08) 97% 100%);">
+          <div class="donut-hole"><div class="donut-hole-val">68%</div><div class="donut-hole-label">Mobile</div></div>
         </div>
         <div class="donut-legend">
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.35)"></div>Mobile — 62% purch</div>
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>Desktop — 35% purch</div>
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.06)"></div>Tablet — 3% purch</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>Mobile — 62% purch</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(121,226,255,0.25)"></div>Desktop — 35% purch</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(121,226,255,0.08)"></div>Tablet — 3% purch</div>
         </div>
       </div>
-      <div class="card-title">Gender Split (Purchases)</div>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <div style="flex:50;height:28px;background:rgba(255,255,255,0.12);border-radius:4px 0 0 4px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:600;">Female 50%</div>
-        <div style="flex:48;height:28px;background:rgba(255,255,255,0.06);display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:600;color:var(--text-dim);">Male 48%</div>
+      <div class="card-title">Gender (Purchases)</div>
+      <div style="display:flex;gap:4px;margin-top:8px;">
+        <div style="flex:50;height:28px;background:var(--cyan-dim);border-radius:4px 0 0 4px;display:flex;align-items:center;padding-left:10px;font-size:10px;font-weight:600;color:var(--cyan);">Female 50%</div>
+        <div style="flex:48;height:28px;background:rgba(121,226,255,0.06);display:flex;align-items:center;padding-left:10px;font-size:10px;font-weight:600;color:var(--text-dim);">Male 48%</div>
         <div style="flex:2;height:28px;background:rgba(255,255,255,0.02);border-radius:0 4px 4px 0;"></div>
       </div>
-    </div>
-  </div>
-
-  <!-- FORECASTS + CREATIVE -->
-  <div class="section-title">Revenue Forecast</div>
-  <div class="two-col" style="margin-bottom:48px;">
-    <div class="card animate delay-2">
-      <div class="card-title">Projected Revenue</div>
-      <div class="forecast-row">
-        <div class="forecast-item">
-          <div class="forecast-period">Next 7 Days</div>
-          <div class="forecast-range">
-            <div class="forecast-range-bar" style="left:10%;right:10%;"></div>
-            <div class="forecast-range-point" style="left:48%;"></div>
-          </div>
-          <div class="forecast-val">$102K</div>
-          <div class="forecast-conf">85%</div>
-        </div>
-        <div class="forecast-item">
-          <div class="forecast-period">Next 14 Days</div>
-          <div class="forecast-range">
-            <div class="forecast-range-bar" style="left:8%;right:8%;"></div>
-            <div class="forecast-range-point" style="left:45%;"></div>
-          </div>
-          <div class="forecast-val">$149K</div>
-          <div class="forecast-conf">80%</div>
-        </div>
-        <div class="forecast-item">
-          <div class="forecast-period">Next 30 Days</div>
-          <div class="forecast-range">
-            <div class="forecast-range-bar" style="left:5%;right:5%;"></div>
-            <div class="forecast-range-point" style="left:42%;"></div>
-          </div>
-          <div class="forecast-val">$289K</div>
-          <div class="forecast-conf">75%</div>
-        </div>
-        <div class="forecast-item">
-          <div class="forecast-period">Event Day (Feb 15)</div>
-          <div class="forecast-range">
-            <div class="forecast-range-bar" style="left:10%;right:10%;"></div>
-            <div class="forecast-range-point" style="left:46%;"></div>
-          </div>
-          <div class="forecast-val">$59K</div>
-          <div class="forecast-conf">82%</div>
-        </div>
-        <div class="forecast-item" style="border:1px solid var(--border-light);">
-          <div class="forecast-period" style="color:#fff;">Full Campaign</div>
-          <div class="forecast-range">
-            <div class="forecast-range-bar" style="left:3%;right:3%;"></div>
-            <div class="forecast-range-point" style="left:40%;"></div>
-          </div>
-          <div class="forecast-val" style="font-size:16px;">$523K</div>
-          <div class="forecast-conf">72%</div>
+      <div style="margin-top:20px;">
+        <div class="card-title">Device AOV</div>
+        <div style="display:flex;gap:10px;margin-top:4px;">
+          <div style="flex:1;padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);text-align:center;"><div style="font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;">Desktop</div><div style="font-size:18px;font-weight:800;color:var(--lime);">$148</div></div>
+          <div style="flex:1;padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);text-align:center;"><div style="font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;">Mobile</div><div style="font-size:18px;font-weight:800;">$125</div></div>
+          <div style="flex:1;padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);text-align:center;"><div style="font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;">Tablet</div><div style="font-size:18px;font-weight:800;">$133</div></div>
         </div>
       </div>
     </div>
-
-    <div class="card animate delay-3">
-      <div class="card-title">Seasonal Index</div>
-      <div class="h-bars" style="margin-bottom:32px;">
-        <div class="h-bar-row"><div class="h-bar-label" style="width:140px">Day (Thursday)</div><div class="h-bar-track"><div class="h-bar-fill" style="width:82%"></div></div><div class="h-bar-val">1.12</div></div>
-        <div class="h-bar-row"><div class="h-bar-label" style="width:140px">Week (Week 4)</div><div class="h-bar-track"><div class="h-bar-fill" style="width:70%"></div></div><div class="h-bar-val">0.95</div></div>
-        <div class="h-bar-row"><div class="h-bar-label" style="width:140px">Month (Jan)</div><div class="h-bar-track"><div class="h-bar-fill" style="width:65%"></div></div><div class="h-bar-val">0.88</div></div>
-        <div class="h-bar-row"><div class="h-bar-label" style="width:140px">Event Proximity</div><div class="h-bar-track"><div class="h-bar-fill" style="width:100%"></div></div><div class="h-bar-val">1.35</div></div>
-      </div>
-      <div style="padding:20px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);text-align:center;">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Combined Seasonal Index</div>
-        <div style="font-size:40px;font-weight:900;">1.28×</div>
-        <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">+28% expected boost</div>
-      </div>
-    </div>
   </div>
-
-  <!-- TOP CREATIVES -->
-  <div class="section-title">Top Creative Assets</div>
-  <div class="card animate delay-2" style="margin-bottom:48px; overflow-x:auto;">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th style="width:28%">Asset</th>
-          <th>Type</th>
-          <th>Platform</th>
-          <th>Impressions</th>
-          <th>CTR</th>
-          <th>Conv</th>
-          <th>ROAS</th>
-          <th>Fatigue</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="campaign-name">Festival Vibe Reel 15s</td><td>Video</td><td><span class="platform-badge">Meta</span></td><td>298K</td><td>4.00%</td><td>187</td><td class="highlight">9.1×</td><td style="color:var(--text-dim)">Low</td></tr>
-        <tr><td class="campaign-name">Jazz Festival Hero 30s</td><td>Video</td><td><span class="platform-badge">Meta</span></td><td>567K</td><td>3.00%</td><td>245</td><td class="highlight">8.2×</td><td style="color:var(--text-dim)">Low</td></tr>
-        <tr><td class="campaign-name">Instagram Stories Promo</td><td>Video</td><td><span class="platform-badge">Meta</span></td><td>198K</td><td>4.00%</td><td>134</td><td>7.8×</td><td style="color:var(--text-muted)">Med</td></tr>
-        <tr><td class="campaign-name">Artist Lineup Carousel</td><td>Carousel</td><td><span class="platform-badge">Meta</span></td><td>423K</td><td>3.00%</td><td>198</td><td>7.4×</td><td style="color:var(--text-dim)">Low</td></tr>
-        <tr><td class="campaign-name">YouTube PreRoll 15s</td><td>Video</td><td><span class="platform-badge">Google</span></td><td>234K</td><td>2.00%</td><td>112</td><td>6.9×</td><td style="color:var(--text-dim)">Low</td></tr>
-        <tr><td class="campaign-name">Early Bird Promo Static</td><td>Image</td><td><span class="platform-badge">Meta</span></td><td>389K</td><td>2.00%</td><td>156</td><td>6.8×</td><td style="color:var(--text-muted)">Med</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- FUNNEL BY SOURCE -->
-  <div class="section-title">Funnel by Source</div>
-  <div class="card animate delay-2" style="overflow-x:auto;">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Source</th>
-          <th>Sessions</th>
-          <th>View Rate</th>
-          <th>Cart Rate</th>
-          <th>Checkout</th>
-          <th>Purchase</th>
-          <th>Overall CVR</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="campaign-name">Direct</td><td>2,053</td><td>88%</td><td>45%</td><td>62%</td><td>55%</td><td class="highlight">7.12%</td></tr>
-        <tr><td class="campaign-name">Organic Search</td><td>3,230</td><td>85%</td><td>42%</td><td>58%</td><td>52%</td><td class="highlight">6.78%</td></tr>
-        <tr><td class="campaign-name">Meta Ads</td><td>24,560</td><td>82%</td><td>35%</td><td>52%</td><td>45%</td><td>5.32%</td></tr>
-        <tr><td class="campaign-name">Google Ads</td><td>18,450</td><td>78%</td><td>38%</td><td>48%</td><td>42%</td><td>4.21%</td></tr>
-      </tbody>
-    </table>
-  </div>
-
 </div>
 
-<!-- FOOTER -->
+<!-- ═══════════════ CUSTOMERS TAB ═══════════════ -->
+<div class="tab-content" id="customers">
+  <div class="two-col">
+    <div>
+      <div class="section-title">New vs Returning</div>
+      <div class="card">
+        <div style="display:flex;gap:4px;margin-bottom:20px;">
+          <div style="flex:62;height:32px;background:var(--cyan-dim);border-radius:4px 0 0 4px;display:flex;align-items:center;padding-left:12px;font-size:11px;font-weight:700;color:var(--cyan);">New 62%</div>
+          <div style="flex:38;height:32px;background:var(--lime-dim);border-radius:0 4px 4px 0;display:flex;align-items:center;padding-left:12px;font-size:11px;font-weight:700;color:var(--lime);">Returning 38%</div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Metric</th><th style="color:var(--cyan)">New</th><th style="color:var(--lime)">Returning</th></tr></thead>
+          <tbody>
+            <tr><td>Sessions Required</td><td>2.1</td><td class="hl-lime">1.4</td></tr>
+            <tr><td>Items per Order</td><td>2.1</td><td class="hl-lime">2.6</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title" style="margin-top:28px;">Revenue Predictions</div>
+      <div class="card" style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Period</th><th style="color:var(--cyan)">New</th><th style="color:var(--lime)">Returning</th><th>Projected</th><th>Conf</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Next 7 Days</td><td>$87,450</td><td>$78,230</td><td class="hl">$96,670</td><td>85%</td></tr>
+            <tr><td class="name">Next 14 Days</td><td>$168,920</td><td>$145,670</td><td class="hl">$192,170</td><td>80%</td></tr>
+            <tr><td class="name">Next 30 Days</td><td>$312,560</td><td>$267,890</td><td class="hl">$357,230</td><td>75%</td></tr>
+            <tr><td class="name">Event Day</td><td>$45,230</td><td>$38,450</td><td class="hl">$52,010</td><td>82%</td></tr>
+            <tr><td class="name" style="color:var(--cyan)">Full Campaign</td><td>$523,450</td><td>$445,930</td><td class="hl-lime">$600,970</td><td>72%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Customer Lifetime Value by Cohort</div>
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>Cohort</th><th>Customers</th><th>Avg LTV</th><th>Repeat Rate</th><th>Avg Orders</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Q1 2025</td><td>1,890</td><td class="hl-lime">$412.50</td><td class="hl-lime">48%</td><td>2.9</td></tr>
+            <tr><td class="name">Q2 2025</td><td>2,340</td><td class="hl">$378.20</td><td>45%</td><td>2.6</td></tr>
+            <tr><td class="name">Q3 2025</td><td>2,890</td><td>$345.80</td><td>42%</td><td>2.4</td></tr>
+            <tr><td class="name">Q4 2025</td><td>3,450</td><td>$312.30</td><td>38%</td><td>2.1</td></tr>
+            <tr><td class="name">Jan 2026</td><td>1,245</td><td>$287.50</td><td>34%</td><td>1.8</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:20px;">
+          <div class="card-title">LTV Trend</div>
+          <div class="h-bars">
+            <div class="h-bar-row"><div class="h-bar-label">Q1 2025</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:100%"></div></div><div class="h-bar-val">$413</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Q2 2025</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:91.7%"></div></div><div class="h-bar-val">$378</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Q3 2025</div><div class="h-bar-track"><div class="h-bar-fill" style="width:83.8%"></div></div><div class="h-bar-val">$346</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Q4 2025</div><div class="h-bar-track"><div class="h-bar-fill" style="width:75.7%"></div></div><div class="h-bar-val">$312</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Jan 2026</div><div class="h-bar-track"><div class="h-bar-fill" style="width:69.7%"></div></div><div class="h-bar-val">$288</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FORECAST TAB ═══════════════ -->
+<div class="tab-content" id="forecast">
+  <div class="two-col">
+    <div>
+      <div class="section-title">Revenue Forecast</div>
+      <div class="card">
+        <div class="card-title">Projected Revenue</div>
+        <div class="forecast-row">
+          <div class="forecast-item"><div class="forecast-period">Next 7 Days</div><div class="forecast-range"><div class="forecast-range-bar" style="left:10%;right:10%;"></div><div class="forecast-range-point" style="left:48%;"></div></div><div class="forecast-val">$102K</div><div class="forecast-conf">85%</div></div>
+          <div class="forecast-item"><div class="forecast-period">Next 14 Days</div><div class="forecast-range"><div class="forecast-range-bar" style="left:8%;right:8%;"></div><div class="forecast-range-point" style="left:45%;"></div></div><div class="forecast-val">$149K</div><div class="forecast-conf">80%</div></div>
+          <div class="forecast-item"><div class="forecast-period">Next 30 Days</div><div class="forecast-range"><div class="forecast-range-bar" style="left:5%;right:5%;"></div><div class="forecast-range-point" style="left:42%;"></div></div><div class="forecast-val">$289K</div><div class="forecast-conf">75%</div></div>
+          <div class="forecast-item"><div class="forecast-period">Event Day (Feb 15)</div><div class="forecast-range"><div class="forecast-range-bar" style="left:10%;right:10%;"></div><div class="forecast-range-point" style="left:46%;"></div></div><div class="forecast-val">$59K</div><div class="forecast-conf">82%</div></div>
+          <div class="forecast-item" style="border-color:var(--cyan);"><div class="forecast-period" style="color:var(--cyan);">Full Campaign</div><div class="forecast-range"><div class="forecast-range-bar" style="left:3%;right:3%;"></div><div class="forecast-range-point" style="left:40%;"></div></div><div class="forecast-val" style="font-size:15px;">$523K</div><div class="forecast-conf">72%</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">Seasonal Index</div>
+      <div class="card">
+        <div class="h-bars" style="margin-bottom:28px;">
+          <div class="h-bar-row"><div class="h-bar-label" style="width:120px">Day (Thursday)</div><div class="h-bar-track"><div class="h-bar-fill" style="width:82%"></div></div><div class="h-bar-val">1.12</div></div>
+          <div class="h-bar-row"><div class="h-bar-label" style="width:120px">Week (Wk 4)</div><div class="h-bar-track"><div class="h-bar-fill" style="width:70%"></div></div><div class="h-bar-val">0.95</div></div>
+          <div class="h-bar-row"><div class="h-bar-label" style="width:120px">Month (Jan)</div><div class="h-bar-track"><div class="h-bar-fill" style="width:65%"></div></div><div class="h-bar-val">0.88</div></div>
+          <div class="h-bar-row"><div class="h-bar-label" style="width:120px">Event Proximity</div><div class="h-bar-track"><div class="h-bar-fill lime" style="width:100%"></div></div><div class="h-bar-val" style="color:var(--lime)">1.35</div></div>
+        </div>
+        <div style="padding:20px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);text-align:center;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Combined Seasonal Index</div>
+          <div style="font-size:40px;font-weight:900;color:var(--lime);">1.28×</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">+28% expected boost</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="footer">
   <div>Platinumlist Dream Report — Dubai Jazz Festival 2026</div>
-  <div>Prototype Dashboard · Data Period: Jan 15–29, 2026</div>
+  <div>Dashboard Prototype · Jan 15–29, 2026</div>
 </div>
 
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
